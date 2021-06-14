@@ -15,3 +15,36 @@ library(broom)
 library(performance)
 ```
 
+```{r}
+# Read data.
+assignment3 <- read_excel("assignment_3_dataset.xlsx")
+```
+
+```{r}
+# EDA
+
+str(assignment3)
+summary(assignment3)
+desc <- describe(assignment3)
+
+# Plots
+ggplot(assignment3, aes(x = age)) +
+  geom_density()
+ggplot(assignment3, aes(x = STAI_trait)) +
+  geom_density()
+ggplot(assignment3, aes(x = pain_cat)) +
+  geom_density()
+ggplot(assignment3, aes(x = cortisol_serum)) +
+  geom_density()
+ggplot(assignment3, aes(x = cortisol_saliva)) +
+  geom_density()
+ggplot(assignment3, aes(x = mindfulness)) +
+  geom_density()
+```
+
+```{r}
+# Build the complex model
+
+
+```
+
