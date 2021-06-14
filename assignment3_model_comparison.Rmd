@@ -13,6 +13,9 @@ library(psych)
 library(sjPlot)
 library(broom)
 library(performance)
+library(olsrr)
+library(GGally)
+library(mctest)
 ```
 
 ```{r}
@@ -43,8 +46,57 @@ ggplot(assignment3, aes(x = mindfulness)) +
 ```
 
 ```{r}
+# Filter out ID_142 (outlier)
+
+assignment3_filtered <- assignment3 %>%
+  filter(ID != "ID_142")
+```
+
+```{r}
 # Build the complex model
 
+complex_model <- 
+  lm(pain ~ age + sex + STAI_trait + pain_cat + mindfulness + cortisol_serum + cortisol_saliva,
+      data = assignment3_filtered)
+```
 
+```{r}
+# View complex model
+
+summary(complex_model)
+tidy_complex_model <- tidy(complex_model, conf.int = TRUE, exponentiate = TRUE)
+plot(complex_model)
+```
+
+```{r}
+# Test the complex model
+
+# Outliers
+
+cd <- cooks.distance(complex_model)
+plot(cd)
+
+# Check normality
+
+ols_test_normality(complex_model)
+
+# Check heteroscedasticity
+
+ols_test_breusch_pagan(complex_model)
+
+# Check linearity
+
+plot(complex_model, 1)
+
+# Check multicollinearity
+
+X <- assignment3_filtered[,4:9]
+print(ggpairs(X))
+
+omcdiag(x = X, y = pain)
+
+# Normality, linearity, homoscedasticity, multicollinearity
+
+check_model(complex_model)
 ```
 
